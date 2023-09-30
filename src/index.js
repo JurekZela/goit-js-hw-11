@@ -1,3 +1,8 @@
+// Описаний в документації
+import SimpleLightbox from "simplelightbox";
+// Додатковий імпорт стилів
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { fetchImages } from './search_images-api';
 
@@ -8,6 +13,9 @@ const ref = {
 };
 
 ref.form.addEventListener('submit', addImagesFetch);
+
+new SimpleLightbox('.gallery a')
+lightbox.refresh()
 
  async function addImagesFetch(e) {
     e.preventDefault();
@@ -20,6 +28,7 @@ ref.form.addEventListener('submit', addImagesFetch);
             onError()
             return;
         }
+       
         const render = await renderCardImages(resultFetch);
         return ref.gallery.insertAdjacentHTML('beforeend', render);
     } catch {onError()}
@@ -37,7 +46,7 @@ async function renderCardImages(name) {
         const  { webformatURL, largeImageURL, tags, likes, views, comments, downloads} = hit;
 
       return `<div class="photo-card">
-      <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+      <a><img src="${webformatURL}" class="gallery__image" alt="${tags}" loading="lazy"></a>
       <div class="info">
         <p class="info-item">
           <b>Likes: ${likes}</b>
