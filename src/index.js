@@ -4,22 +4,24 @@ import { fetchImages } from './search_images-api';
 const ref = {
     form: document.getElementById('search-form'),
     input: document.querySelector('input'),
+    gallery: document.querySelector('.gallery'),
 };
 
 ref.form.addEventListener('submit', addImagesFetch);
 
  async function addImagesFetch(e) {
     e.preventDefault();
+    ref.gallery.innerHTML = '';
 
     try {
         const inputValue = ref.input.value;
         const resultFetch = await fetchImages(inputValue);
-        
         if (resultFetch.total <= 0) {
             onError()
             return;
         }
-        console.log(resultFetch.hits);
+        const render = await renderCardImages(resultFetch);
+        return ref.gallery.insertAdjacentHTML('beforeend', render);
     } catch {onError()}
 };
 
@@ -35,19 +37,19 @@ async function renderCardImages(name) {
         const  { webformatURL, largeImageURL, tags, likes, views, comments, downloads} = hit;
 
       return `<div class="photo-card">
-      <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+      <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
       <div class="info">
         <p class="info-item">
-          <b>${likes}</b>
+          <b>Likes: ${likes}</b>
         </p>
         <p class="info-item">
-          <b>${views}</b>
+          <b>Views: ${views}</b>
         </p>
         <p class="info-item">
-          <b>${comments}</b>
+          <b>Comments: ${comments}</b>
         </p>
         <p class="info-item">
-          <b>${downloads}</b>
+          <b>Downloads: ${downloads}</b>
         </p>
       </div>
     </div>`;
