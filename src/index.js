@@ -3,7 +3,7 @@ import SimpleLightbox from "simplelightbox";
 // Додатковий імпорт стилів
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-// const  lightbox = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250,})
+const  lightbox = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250,})
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { fetchImages } from './search_images-api';
@@ -81,7 +81,17 @@ ref.loadMore.addEventListener('click', pageRenderCard)
 
 
 async function  pageRenderCard() {
+
   try {
+    const { height: cardHeight } = document
+    .querySelector(".gallery")
+    .firstElementChild.getBoundingClientRect();
+  
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: "smooth",
+  });
+
     page +=1;
     const inputValue = ref.input.value;
     const renderNextPage = await fetchImages(inputValue, page);
