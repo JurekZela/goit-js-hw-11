@@ -89,3 +89,46 @@ input {
     height: 18px;
     color: black;
 }
+
+/* LOAD MORE */
+
+.block-load__more{
+  display: flex;
+  justify-content: center;
+}
+
+.load-more {
+  display: none;
+  margin-bottom: 10px;
+  width: 202px;
+  min-height: 50px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.875;
+  letter-spacing: 0.06em;
+  color: white;
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+  border: none;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.load-more:hover{
+  background: linear-gradient(-45deg, rgba(2,0,36,1), rgba(9,9,121,1), rgba(0,212,255,1));
+	animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
