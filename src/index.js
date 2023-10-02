@@ -3,13 +3,13 @@ import SimpleLightbox from "simplelightbox";
 // Додатковий імпорт стилів
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-const  lightbox = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250,})
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { fetchImages } from './search_images-api';
 
 let page = 0;
 let perPage = 40;
+const  lightbox = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250,})
 
 const ref = {
     form: document.getElementById('search-form'),
@@ -32,11 +32,14 @@ ref.form.addEventListener('submit', addImagesFetch);
             onError()
             return;
         }
-console.log(resultFetch);
+        
         const render = await renderCardImages(resultFetch);
         Notify.success(`Hooray! We found ${resultFetch.totalHits} images.`);
         ref.loadMore.style.display = 'block';
-        return ref.gallery.insertAdjacentHTML('beforeend',  render);
+
+        lightbox.refresh();
+
+        return ref.gallery.insertAdjacentHTML('beforeend', render);
     } catch {onError()}
 };
 
@@ -51,13 +54,12 @@ function onError() {
         ref.loadMore.style.display = 'none';
 };
 
-
 async function renderCardImages({ hits }) {
     return hits.map(hit => {
       const  { webformatURL, largeImageURL, tags, likes, views, comments, downloads} = hit;
 
       return `<div class="photo-card">
-      <a class="open-original-photo"><img src="${webformatURL}" class="gallery__image" alt="${tags}" loading="lazy"></a>
+      <a class="open-original-photo"  href="${largeImageURL}"><img src="${webformatURL}" class="gallery__image" alt="${tags}" loading="lazy"></a>
       <div class="info">
         <p class="info-item">
           <b>Likes: ${likes}</b>
@@ -73,8 +75,7 @@ async function renderCardImages({ hits }) {
         </p>
       </div>
     </div>`;
-    })
-    .join('');
+    }).join('');
 };
 
 ref.loadMore.addEventListener('click', pageRenderCard)
@@ -86,12 +87,13 @@ async function  pageRenderCard() {
     const { height: cardHeight } = document
     .querySelector(".gallery")
     .firstElementChild.getBoundingClientRect();
-  
+
   window.scrollBy({
     top: cardHeight * 2,
     behavior: "smooth",
   });
-
+  lightbox.refresh();
+  
     page +=1;
     const inputValue = ref.input.value;
     const renderNextPage = await fetchImages(inputValue, page);
