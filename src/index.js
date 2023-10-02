@@ -37,9 +37,8 @@ ref.form.addEventListener('submit', addImagesFetch);
         Notify.success(`Hooray! We found ${resultFetch.totalHits} images.`);
         ref.loadMore.style.display = 'block';
 
+        ref.gallery.insertAdjacentHTML('beforeend', render);
         lightbox.refresh();
-
-        return ref.gallery.insertAdjacentHTML('beforeend', render);
     } catch {onError()}
 };
 
@@ -92,14 +91,15 @@ async function  pageRenderCard() {
     top: cardHeight * 2,
     behavior: "smooth",
   });
-  lightbox.refresh();
-  
+
     page +=1;
     const inputValue = ref.input.value;
     const renderNextPage = await fetchImages(inputValue, page);
     const render = await renderCardImages(renderNextPage);
     reachedEndResult(renderNextPage)
-    return ref.gallery.insertAdjacentHTML('beforeend',  render);
+     ref.gallery.insertAdjacentHTML('beforeend',  render);
+
+     lightbox.refresh();
   } catch  {
     Notify.info("We're sorry, but you've reached the end of search results.", {position: 'center-bottom', timeout: 1000});
   }
